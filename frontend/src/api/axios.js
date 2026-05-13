@@ -85,7 +85,16 @@ api.interceptors.response.use(
     }
 
     // Normalise error message — never expose raw stack traces to the UI
-    const serverMessage = err.response?.data?.error || err.response?.data?.message;
+    let serverMessage = err.response?.data?.error || err.response?.data?.message;
+    
+    if (!serverMessage && err.response?.data?.errors && Array.isArray(err.response.data.errors)) {
+      serverMessage = err.response.data.errors[0]?.msg || err.response.data.errors[0];
+    }
+
+    if (typeof serverMessage === 'object' && serverMessage !== null) {
+      serverMessage = serverMessage.message || serverMessage.msg || JSON.stringify(serverMessage);
+    }
+
     const networkMessage = err.code === 'ECONNABORTED' ? 'Request timed out. Please try again.' : null;
     const fallback = typeof status === 'number' && status >= 500
       ? 'Something went wrong on our end. Please try again.'
