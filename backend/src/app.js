@@ -233,7 +233,7 @@ if (config.isProd) {
 app.get('/', (_req, res) => res.json({ name: 'WriteGen AI API', docs: '/api-docs', health: '/health' }));
 
 // ── Health check ──────────────────────────────────────────────────────────────
-app.get('/health', (_req, res) => res.json({
+app.get(['/health', '/api/health'], (_req, res) => res.json({
   status:  'ok',
   env:     config.nodeEnv,
   uptime:  Math.round(process.uptime()),

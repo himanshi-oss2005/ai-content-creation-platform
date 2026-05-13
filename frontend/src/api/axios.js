@@ -30,7 +30,7 @@ api.interceptors.request.use(async (config) => {
     // If another request is already priming CSRF, wait for it
     if (!csrfPromise) {
       csrfPromise = axios
-        .get(`${BASE.replace('/api', '')}/health`, { withCredentials: true })
+        .get(`${BASE}/health`, { withCredentials: true })
         .then(() => { csrfReady = true; })
         .catch((err) => { 
           // Log error but continue anyway - health check might not be critical
