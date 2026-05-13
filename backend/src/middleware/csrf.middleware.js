@@ -17,7 +17,7 @@ const setCsrfCookie = (req, res, next) => {
     res.cookie(CSRF_COOKIE, token, {
       httpOnly: false,
       secure:   isProd,
-      sameSite: 'lax',
+      sameSite: isProd ? 'none' : 'lax',
       path:     '/',
       maxAge:   4 * 60 * 60 * 1000,
     });

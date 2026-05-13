@@ -18,7 +18,7 @@ const attachTokenCookie = (res, token) => {
   res.cookie('jwt', token, {
     httpOnly: true,
     secure: config.isProd,
-    sameSite: 'strict',
+    sameSite: config.isProd ? 'none' : 'strict',
     maxAge: 1000 * 60 * 60 * 24 * 7,
     path: '/',
   });
@@ -156,7 +156,7 @@ exports.logout = asyncHandler(async (_req, res) => {
   res.clearCookie('jwt', {
     httpOnly: true,
     secure: config.isProd,
-    sameSite: 'strict',
+    sameSite: config.isProd ? 'none' : 'strict',
     path: '/',
   });
   res.json({ message: 'Logged out successfully' });
