@@ -12,8 +12,9 @@ const TOKEN_BYTES = 32;
  * in the X-XSRF-Token request header (double-submit cookie pattern).
  */
 const setCsrfCookie = (req, res, next) => {
-  if (!req.cookies?.[CSRF_COOKIE]) {
-    const token = crypto.randomBytes(TOKEN_BYTES).toString('hex');
+  let token = req.cookies?.[CSRF_COOKIE];
+  if (!token) {
+    token = crypto.randomBytes(TOKEN_BYTES).toString('hex');
     res.cookie(CSRF_COOKIE, token, {
       httpOnly: false,
       secure:   isProd,
@@ -22,6 +23,9 @@ const setCsrfCookie = (req, res, next) => {
       maxAge:   4 * 60 * 60 * 1000,
     });
   }
+  // Expose token to frontend JS across domains
+  res.setHeader('x-xsrf-token', token);
+  res.setHeader('Access-Control-Expose-Headers', 'x-xsrf-token');
   next();
 };
 

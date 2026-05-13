@@ -17,7 +17,10 @@ const api = axios.create({
 let csrfReady = false;
 let csrfPromise = null;
 
+let savedCsrfToken = null;
+
 function getCsrfToken() {
+  if (savedCsrfToken) return savedCsrfToken;
   const token = document.cookie
     .split('; ')
     .find((c) => c.startsWith('XSRF-TOKEN='))
@@ -59,9 +62,15 @@ api.interceptors.request.use(async (config) => {
   return config;
 });
 
-// ── Response interceptor — normalise errors ───────────────────────────────────
+// ── Response interceptor — normalise errors & capture CSRF ────────────────────
 api.interceptors.response.use(
-  (res) => res,
+  (res) => {
+    // Capture CSRF token from headers if backend provides it (for cross-domain setups)
+    if (res.headers['x-xsrf-token']) {
+      savedCsrfToken = res.headers['x-xsrf-token'];
+    }
+    return res;
+  },
   (err) => {
     const status = err.response?.status;
 
