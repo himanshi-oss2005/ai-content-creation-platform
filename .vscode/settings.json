@@ -1,0 +1,12 @@
+{
+  "eslint.enable": true,
+  "eslint.packageManager": "npm",
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact"
+  ],
+  "eslint.run": "onType",
+  "eslint.workingDirectories": [
+    { "directory": "." }
+  ]
+}

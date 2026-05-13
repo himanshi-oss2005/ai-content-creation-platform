@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: writegen-ai-backend
+    env: node
+    region: oregon
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: USE_MOCK_AI
+        value: "true"
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: STRIPE_PREMIUM_PRICE_ID
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: FREE_DAILY_CREDITS
+        value: "10"
+      - key: PREMIUM_DAILY_CREDITS
+        value: "100"

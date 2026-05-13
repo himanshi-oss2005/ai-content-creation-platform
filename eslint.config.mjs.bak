@@ -1,0 +1,65 @@
+import js from "@eslint/js";
+import globals from "globals";
+import pluginReact from "eslint-plugin-react";
+import pluginReactHooks from "eslint-plugin-react-hooks";
+import { defineConfig } from "eslint/config";
+
+export default defineConfig([
+  {
+    ignores: [
+      "node_modules/**",
+      "backend/node_modules/**",
+      "frontend/node_modules/**",
+      "frontend/dist/**",
+      "dist/**",
+      "build/**",
+      "coverage/**",
+      "public/**",
+    ],
+  },
+  {
+    settings: {
+      react: {
+        version: "18.2",
+        jsxRuntime: "automatic",
+      },
+    },
+  },
+  {
+    files: ["**/*.{js,mjs,cjs,jsx}"],
+    plugins: { js },
+    extends: ["js/recommended"],
+    languageOptions: {
+      globals: { ...globals.browser, ...globals.node },
+      ecmaVersion: "latest",
+      sourceType: "module",
+      parserOptions: { ecmaFeatures: { jsx: true } },
+    },
+  },
+  pluginReact.configs.flat.recommended,
+  {
+    files: ["**/*.{js,jsx}"],
+    plugins: { "react-hooks": pluginReactHooks },
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "module",
+      parserOptions: { ecmaFeatures: { jsx: true } },
+    },
+    settings: {
+      react: {
+        version: "18.2",
+        jsxRuntime: "automatic",
+      },
+    },
+    rules: {
+      "react/react-in-jsx-scope": "off",
+      "react-hooks/exhaustive-deps": "error",
+    },
+  },
+  {
+    files: ["**/*.test.js", "**/*.spec.js"],
+    languageOptions: {
+      globals: { ...globals.jest, ...globals.node },
+    },
+  },
+]);
