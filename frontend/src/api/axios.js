@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-const BASE = isLocal ? (import.meta.env.VITE_API_URL || 'http://localhost:5000/api') : '/api';
+const BASE = isLocal ? (import.meta.env.VITE_API_URL || 'http://localhost:5000/api') : (import.meta.env.VITE_API_URL || '/api');
 
 const api = axios.create({
   baseURL: BASE,
