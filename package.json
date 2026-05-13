@@ -11,8 +11,13 @@
     "lint:backend": "eslint backend/src --ext .js",
     "lint:all": "npm run lint:backend && npm run lint:frontend",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "build": "npm run build --workspace=frontend"
   },
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
   "keywords": [],
   "author": "",
   "license": "ISC",

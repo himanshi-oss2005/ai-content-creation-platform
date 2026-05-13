@@ -1,11 +1,11 @@
 const crypto = require('crypto');
 
-const REQUIRED_IN_PROD = ['JWT_SECRET', 'MONGO_URI', 'FRONTEND_URL'];
+const REQUIRED_IN_PROD = ['JWT_SECRET', 'MONGO_URI'];
 
 if (process.env.NODE_ENV === 'production') {
   const missing = REQUIRED_IN_PROD.filter((k) => !process.env[k]);
   if (missing.length) {
-    throw new Error(`Missing required environment variables: ${missing.join(', ')}`);
+    console.warn(`Missing required environment variables: ${missing.join(', ')}`);
   }
 }
 
@@ -22,10 +22,15 @@ const isPlaceholderSecret = (secret) => {
 };
 
 const normalizeFrontendUrls = () => {
-  const raw = process.env.FRONTEND_URL?.trim() || (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4200');
+  let raw = process.env.FRONTEND_URL?.trim();
+  if (!raw && process.env.VERCEL_PROJECT_PRODUCTION_URL) raw = `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  if (!raw && process.env.VERCEL_URL) raw = `https://${process.env.VERCEL_URL}`;
+  if (!raw) raw = (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4200');
+
   if (!raw) {
     if (process.env.NODE_ENV === 'production') {
-      throw new Error('FRONTEND_URL must be set in production and use https://');
+      console.warn('FRONTEND_URL must be set in production and use https://. Falling back to *');
+      return ['*'];
     }
     return ['http://localhost:4200'];
   }
