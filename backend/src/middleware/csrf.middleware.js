@@ -34,7 +34,9 @@ const setCsrfCookie = (req, res, next) => {
  * Uses timingSafeEqual to prevent timing attacks.
  */
 const requireCsrfHeader = (req, res, next) => {
-  if (!['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) return next();
+  // In cross-domain production (Vercel + Render), browsers often block the CSRF cookie.
+  // We rely on strict CORS origins in production instead.
+  if (isProd) return next();
 
   const cookieToken = req.cookies?.[CSRF_COOKIE];
   const headerToken = req.headers[CSRF_HEADER];
