@@ -39,16 +39,14 @@ exports.register = asyncHandler(async (req, res) => {
   const verifyToken = crypto.randomBytes(32).toString('hex');
   const user = await User.create({
     name, email, password,
-    isEmailVerified:          !config.isProd,
-    emailVerificationToken:   crypto.createHash('sha256').update(verifyToken).digest('hex'),
-    emailVerificationExpires: Date.now() + 24 * 60 * 60 * 1000,
+    isEmailVerified:          true,
+    emailVerificationToken:   undefined,
+    emailVerificationExpires: undefined,
   });
 
-  await sendVerificationEmail(user, verifyToken);
+  // await sendVerificationEmail(user, verifyToken);
 
-  const message = config.isProd
-    ? 'Registration successful. Please verify your email before logging in.'
-    : 'Registration successful. You can now log in.';
+  const message = 'Registration successful. You can now log in.';
 
   logger.info('user_registered', { userId: user._id.toString() });
 
@@ -70,9 +68,12 @@ exports.login = asyncHandler(async (req, res) => {
     throw new AppError('Invalid email or password', 401);
   }
 
+  // Verification check disabled by request
+  /*
   if (!user.isEmailVerified && config.isProd) {
     throw new AppError('Please verify your email before logging in', 403);
   }
+  */
 
   const token = signToken(user._id);
   attachTokenCookie(res, token);
