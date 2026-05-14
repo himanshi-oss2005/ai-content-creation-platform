@@ -1,0 +1,52 @@
+services:
+  - type: web
+    name: writegen-ai-backend
+    env: node
+    region: oregon # or frankfurt, ohio, singapore
+    buildCommand: npm install
+    startCommand: npm run start # Make sure you have a start script in package.json, e.g., "start": "node src/server.js"
+    
+    # Environment Variables
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000 # Render assigns dynamic ports, but uses PORT env var
+        
+      # Database (Replace with your actual MongoDB Atlas connection string)
+      - key: MONGO_URI
+        value: mongodb+srv://<REPLACE_WITH_USERNAME>:<REPLACE_WITH_PASSWORD>@<REPLACE_WITH_CLUSTER>.mongodb.net/writegen_ai?retryWrites=true&w=majority
+        
+      # Auth
+      - key: JWT_SECRET
+        value: generate_a_very_secure_random_string_here_for_production
+      - key: JWT_EXPIRES_IN
+        value: 7d
+
+      # Groq AI Keys
+      - key: GROQ_API_KEY
+        value: <add_your_groq_api_key_in_render_dashboard>
+      - key: OPENAI_MODEL
+        value: llama-3.3-70b-versatile
+
+      # AI Behaviour 
+      - key: USE_MOCK_AI
+        value: false
+      - key: USE_FALLBACK_ONLY
+        value: false
+      - key: AI_TIMEOUT_MS
+        value: 15000
+      - key: AI_MAX_RETRIES
+        value: 2
+
+      # Feature Flags
+      - key: ENABLE_FALLBACK
+        value: true
+      - key: ENABLE_AB_TESTING
+        value: true
+      - key: ENABLE_CACHING
+        value: true
+
+      # Frontend Connection
+      - key: FRONTEND_URL
+        value: https://replace-this-with-your-actual-vercel-url.vercel.app
