@@ -11,21 +11,21 @@ services:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: 10000 # Render assigns dynamic ports, but uses PORT env var
+        value: 10000
         
-      # Database (Replace with your actual MongoDB Atlas connection string)
+      # Database (Managed in Render Dashboard)
       - key: MONGO_URI
-        value: mongodb+srv://<REPLACE_WITH_USERNAME>:<REPLACE_WITH_PASSWORD>@<REPLACE_WITH_CLUSTER>.mongodb.net/writegen_ai?retryWrites=true&w=majority
+        sync: false
         
-      # Auth
+      # Auth (Managed in Render Dashboard)
       - key: JWT_SECRET
-        value: generate_a_very_secure_random_string_here_for_production
+        sync: false
       - key: JWT_EXPIRES_IN
         value: 7d
 
-      # Groq AI Keys
+      # Groq AI Keys (Managed in Render Dashboard)
       - key: GROQ_API_KEY
-        value: <add_your_groq_api_key_in_render_dashboard>
+        sync: false
       - key: OPENAI_MODEL
         value: llama-3.3-70b-versatile
 
@@ -47,6 +47,6 @@ services:
       - key: ENABLE_CACHING
         value: true
 
-      # Frontend Connection
+      # Frontend Connection (Managed in Render Dashboard)
       - key: FRONTEND_URL
-        value: https://replace-this-with-your-actual-vercel-url.vercel.app
+        sync: false
